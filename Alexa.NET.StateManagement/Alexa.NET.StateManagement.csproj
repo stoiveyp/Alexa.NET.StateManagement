@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <Authors>Steven Pears</Authors>
+    <Description>Small helper library for state management that works with Alexa.NET - based on the functionality exposed in the Java ASK SDK v2</Description>
+    <PackageReleaseNotes>Initial functionality</PackageReleaseNotes>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+</Project>
