@@ -1,11 +1,12 @@
 namespace Alexa.NET.StateManagement
 {
-    using Alexa.NET.Request;
+    using Request;
     using System.Collections.Generic;
+
     public class SkillState : ISkillState
     {
-        private Dictionary<string,object> _requestAttributes;
-        private Session _session;
+        public Dictionary<string, object> RequestAttributes { get; }
+        public Session Session { get; }
 
         public SkillState() : this((Session)null) { }
 
@@ -16,8 +17,21 @@ namespace Alexa.NET.StateManagement
 
         public SkillState(Session session)
         {
-            _session = session;
-            _requestAttributes = new Dictionary<string,object>();
+            Session = session;
+            RequestAttributes = new Dictionary<string, object>();
+        }
+
+        public void SetAttribute(string key, string value)
+        {
+            if (!RequestAttributes.TryAdd(key, value))
+            {
+                RequestAttributes[key] = value;
+            }
+        }
+
+        public object GetAttribute(string testKey)
+        {
+            return RequestAttributes[testKey];
         }
     }
 }
