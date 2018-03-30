@@ -1,8 +1,9 @@
 namespace Alexa.NET.StateManagement{
     public interface ISkillState
     {
-        object GetAttribute(string testKey);
-        void SetAttribute(string testKey, string testValue);
-        void SetAttribute(string testKey, string testValue, AttributeLevel level);
+        object GetAttribute(string key);
+        object GetAttribute(string key, AttributeLevel level);
+        void SetAttribute(string key, string value);
+        void SetAttribute(string key, string value, AttributeLevel level);
     }
 }

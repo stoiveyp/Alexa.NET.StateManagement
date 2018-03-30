@@ -20,7 +20,7 @@ namespace Alexa.NET.StateManagement.Tests
             state.SetAttribute(simpleKey, simpleValue, AttributeLevel.Session);
             var result = state.Session.Attributes[simpleKey];
 
-            Assert.Equal(simpleValue,result);
+            Assert.Equal(simpleValue, result);
         }
 
         [Fact]
@@ -28,8 +28,31 @@ namespace Alexa.NET.StateManagement.Tests
         {
             var state = new SkillState();
 
-            Assert.Throws<InvalidOperationException>(() => state.SetAttribute(simpleKey,simpleValue, AttributeLevel.Session));
+            Assert.Throws<InvalidOperationException>(() =>
+                state.SetAttribute(simpleKey, simpleValue, AttributeLevel.Session));
+        }
 
+        [Fact]
+        public void GetAttributeRetrievesSessionWhenRequestIsEmpty()
+        {
+            var state = new SkillState(new Session { Attributes = new Dictionary<string, object>() });
+            state.Session.Attributes.Add(simpleKey, simpleValue);
+
+            var value = state.GetAttribute(simpleKey);
+
+            Assert.Equal(simpleValue, value);
+        }
+
+        [Fact]
+        public void GetAttributeRetrievesRequestWhenAvailable()
+        {
+            var state = new SkillState(new Session { Attributes = new Dictionary<string, object>() });
+            state.SetAttribute(simpleKey, simpleValue);
+            state.SetAttribute(simpleKey,replacementValue,AttributeLevel.Session);
+
+            var value = state.GetAttribute(simpleKey);
+
+            Assert.Equal(simpleValue, value);
         }
     }
 }

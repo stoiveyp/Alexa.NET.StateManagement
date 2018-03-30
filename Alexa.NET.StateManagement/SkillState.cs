@@ -24,9 +24,33 @@ namespace Alexa.NET.StateManagement
             RequestAttributes = new Dictionary<string, object>();
         }
 
-        public object GetAttribute(string testKey)
+        public object GetAttribute(string key)
         {
-            return RequestAttributes[testKey];
+            return GetRequest(key) ?? GetSession(key);
+        }
+
+        public object GetAttribute(string key, AttributeLevel level)
+        {
+            switch (level)
+            {
+                case AttributeLevel.Request:
+                    return GetRequest(key);
+                case AttributeLevel.Session:
+                    return GetSession(key);
+            }
+
+            return null;
+        }
+
+        private object GetRequest(string key)
+        {
+            return RequestAttributes.TryGetValue(key, out object value) ? value : null;
+        }
+
+        private object GetSession(string key)
+        {
+            object value = null;
+            return Session?.Attributes.TryGetValue(key, out value) ?? false ? value : null;
         }
 
         public void SetAttribute(string key, string value)
