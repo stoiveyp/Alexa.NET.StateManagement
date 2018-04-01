@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Alexa.NET.StateManagement;
 using Xunit;
 
@@ -10,25 +11,13 @@ namespace Alexa.NET.StateManagement.Tests
         private string simpleValue = "value";
         private string replacementValue = "replacement";
 
-
         [Fact]
-        public void SetAttributeAssumesRequestPersistence()
-        {
-            var state = new SkillState();
-
-            state.SetAttribute(simpleKey, simpleValue);
-
-            Assert.True(state.RequestAttributes.ContainsKey(simpleKey));
-            Assert.Equal(simpleValue, state.RequestAttributes[simpleKey]);
-        }
-
-        [Fact]
-        public void GetAttributeAssumesRequestPersistence()
+        public async Task GetAttributeAssumesRequestPersistence()
         {
             var state = new SkillState();
 
             state.RequestAttributes.Add(simpleKey, simpleValue);
-            var result = (string)state.GetAttribute(simpleKey);
+            var result = await state.Get<string>(simpleKey);
 
             Assert.Equal(simpleValue, result);
         }
@@ -38,9 +27,9 @@ namespace Alexa.NET.StateManagement.Tests
         {
             var state = new SkillState();
 
-            state.SetAttribute(simpleKey,simpleValue);
-            state.SetAttribute(simpleKey,replacementValue);
-            var result = state.GetAttribute(simpleKey);
+            state.SetRequest(simpleKey,simpleValue);
+            state.SetRequest(simpleKey,replacementValue);
+            var result = state.GetRequest<string>(simpleKey);
 
             Assert.Equal(replacementValue,result);
         }

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Alexa.NET.StateManagement
 {
     public interface IPersistenceStore
     {
-        object Get(string simpleKey);
-        void Set(string simpleKey, object simpleValue);
+        Task<T> Get<T>(string simpleKey);
+        Task Set<T>(string simpleKey, T simpleValue);
     }
 }

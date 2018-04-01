@@ -5,12 +5,13 @@ namespace Alexa.NET.StateManagement
 {
     using Request;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
 
     public class SkillState : ISkillState
     {
         private const string NoPersistenceMessage = "No persistence store set";
         public Dictionary<string, object> RequestAttributes { get; }
-        public Session Session { get; private set;}
+        public Session Session { get; private set; }
 
         public IPersistenceStore Persistence { get; }
 
@@ -40,78 +41,88 @@ namespace Alexa.NET.StateManagement
             RequestAttributes = new Dictionary<string, object>();
         }
 
-        public object GetAttribute(string key)
+        public async Task<T> Get<T>(string key)
         {
-            return GetRequest(key) ?? GetSession(key) ?? GetPersistent(key);
-        }
-
-        public object GetAttribute(string key, AttributeLevel level)
-        {
-            switch (level)
+            if (TryGetRequest<T>(key, out T localRequest))
             {
-                case AttributeLevel.Request:
-                    return GetRequest(key);
-                case AttributeLevel.Session:
-                    return GetSession(key);
-                case AttributeLevel.Persistent:
-                    if (Persistence == null)
-                    {
-                        throw new InvalidOperationException(NoPersistenceMessage);
-                    }
-                    return GetPersistent(key);
-
+                return localRequest;
             }
 
-            return null;
-        }
-
-        private object GetPersistent(string key)
-        {
-            return Persistence?.Get(key);
-        }
-
-        private object GetRequest(string key)
-        {
-            return RequestAttributes.TryGetValue(key, out object value) ? value : null;
-        }
-
-        private object GetSession(string key)
-        {
-            object value = null;
-            return Session?.Attributes.TryGetValue(key, out value) ?? false ? value : null;
-        }
-
-        public void SetAttribute(string key, string value)
-        {
-            SetAttribute(key, value, AttributeLevel.Request);
-        }
-
-        public void SetAttribute(string key, string value, AttributeLevel level)
-        {
-            switch (level)
+            if (TryGetSession<T>(key, out T localSession))
             {
-                case AttributeLevel.Request:
-                    AddRequest(key, value);
-                    break;
-                case AttributeLevel.Session:
-                    AddSession(key, value);
-                    break;
-                case AttributeLevel.Persistent:
-                    AddPersistent(key, value);
-                    break;
+                return localSession;
             }
+
+            return await GetPersistentOrDefault<T>(key);
         }
 
-        private void AddPersistent(string key, object value)
+        public Task<T> GetPersistent<T>(string key)
         {
             if (Persistence == null)
             {
                 throw new InvalidOperationException(NoPersistenceMessage);
             }
-            Persistence.Set(key, value);
+            return GetPersistentOrDefault<T>(key);
         }
 
-        private void AddSession(string key, string value)
+        private Task<T> GetPersistentOrDefault<T>(string key)
+        {
+            return Persistence?.Get<T>(key) ?? Task.FromResult(default(T));
+        }
+
+        public T GetRequest<T>(string key)
+        {
+            if (TryGetRequest<T>(key, out T localRequest))
+            {
+                return localRequest;
+            }
+            return default(T);
+        }
+        private bool TryGetRequest<T>(string key, out T value)
+        {
+            if (RequestAttributes.TryGetValue(key, out object tempValue))
+            {
+                value = (T)tempValue;
+                return true;
+            }
+
+            value = default(T);
+            return false;
+        }
+
+
+        public T GetSession<T>(string key)
+        {
+            if (TryGetSession<T>(key, out T localSession))
+            {
+                return localSession;
+            }
+            return default(T);
+        }
+
+        private bool TryGetSession<T>(string key, out T value)
+        {
+            object tempValue = null;
+            if (Session?.Attributes?.TryGetValue(key, out tempValue) ?? false)
+            {
+                value = (T)tempValue;
+                return true;
+            }
+
+            value = default(T);
+            return false;
+        }
+
+        public Task SetPersistent<T>(string key, T value)
+        {
+            if (Persistence == null)
+            {
+                throw new InvalidOperationException(NoPersistenceMessage);
+            }
+            return Persistence.Set(key, value);
+        }
+
+        public void SetSession<T>(string key, T value)
         {
             if (Session == null)
             {
@@ -129,7 +140,7 @@ namespace Alexa.NET.StateManagement
             }
         }
 
-        private void AddRequest(string key, string value)
+        public void SetRequest<T>(string key, T value)
         {
             if (!RequestAttributes.TryAdd(key, value))
             {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using NSubstitute;
 using Xunit;
 
@@ -11,14 +12,14 @@ namespace Alexa.NET.StateManagement.Tests
         private const string ReplacementValue = "replacement";
 
         [Fact]
-        public void GetCallsPersistentStore()
+        public async Task GetCallsPersistentStore()
         {
             var persistence = Substitute.For<IPersistenceStore>();
             var state = new SkillState(persistence);
 
-            state.GetAttribute(SimpleKey);
+            await state.Get<string>(SimpleKey);
 
-            persistence.Received(1).Get(SimpleKey);
+            await persistence.Received(1).Get<string>(SimpleKey);
         }
 
         [Fact]
@@ -27,70 +28,70 @@ namespace Alexa.NET.StateManagement.Tests
             var persistence = Substitute.For<IPersistenceStore>();
             var state = new SkillState(persistence);
 
-            state.SetAttribute(SimpleKey, SimpleValue, AttributeLevel.Persistent);
+            state.SetPersistent(SimpleKey, SimpleValue);
 
             persistence.Received(1).Set(SimpleKey, SimpleValue);
         }
 
         [Fact]
-        public void PersistentHiddenWhenRequestAvailable()
+        public async Task PersistentHiddenWhenRequestAvailable()
         {
             var persistence = Substitute.For<IPersistenceStore>();
-            persistence.Get(SimpleKey).Returns(ReplacementValue);
+            persistence.Get<string>(SimpleKey).Returns(ReplacementValue);
 
             var skillState = new SkillState();
-            skillState.SetAttribute(SimpleKey, SimpleValue);
+            skillState.SetRequest(SimpleKey, SimpleValue);
 
-            var result = skillState.GetAttribute(SimpleKey);
+            var result = await skillState.Get<string>(SimpleKey);
             Assert.Equal(SimpleValue, result);
 
         }
 
         [Fact]
-        public void PersistentHiddenWhenSessionAvailable()
+        public async Task PersistentHiddenWhenSessionAvailable()
         {
             var persistence = Substitute.For<IPersistenceStore>();
-            persistence.Get(SimpleKey).Returns(ReplacementValue);
+            persistence.Get<string>(SimpleKey).Returns(ReplacementValue);
 
             var skillState = new SkillState();
-            skillState.SetAttribute(SimpleKey, SimpleValue, AttributeLevel.Session);
+            skillState.SetSession(SimpleKey, SimpleValue);
 
-            var result = skillState.GetAttribute(SimpleKey);
+            var result = await skillState.Get<string>(SimpleKey);
             Assert.Equal(SimpleValue, result);
         }
 
         [Fact]
-        public void PersistentCalledWhenGetCalledExplicit()
+        public async Task PersistentCalledWhenGetCalledExplicit()
         {
             var persistence = Substitute.For<IPersistenceStore>();
-            persistence.Get(SimpleKey).Returns(ReplacementValue);
+            persistence.Get<string>(SimpleKey).Returns(ReplacementValue);
 
             var skillState = new SkillState(persistence);
-            skillState.SetAttribute(SimpleKey, SimpleValue, AttributeLevel.Session);
+            skillState.SetSession(SimpleKey, SimpleValue);
 
-            var result = skillState.GetAttribute(SimpleKey, AttributeLevel.Persistent);
+            var result = await skillState.GetPersistent<string>(SimpleKey);
             Assert.Equal(ReplacementValue, result);
         }
 
         [Fact]
-        public void PersistentThrowsExceptionWhenNoStoreSet()
+        public async Task PersistentThrowsExceptionWhenNoStoreSet()
         {
             var state = new SkillState();
-            Assert.Throws<InvalidOperationException>(() => state.SetAttribute(SimpleKey, SimpleValue, AttributeLevel.Persistent));
+            await Assert.ThrowsAsync<InvalidOperationException>(() => state.SetPersistent(SimpleKey, SimpleValue));
         }
 
         [Fact]
-        public void PersistentThrowsExceptionOnExplicitCallWhenNoStoreSet()
+        public async Task PersistentThrowsExceptionOnExplicitCallWhenNoStoreSet()
         {
             var state = new SkillState();
-            Assert.Throws<InvalidOperationException>(() => state.SetAttribute(SimpleKey, SimpleValue, AttributeLevel.Persistent));
+            await Assert.ThrowsAsync<InvalidOperationException>(() => state.SetPersistent(SimpleKey, SimpleValue));
         }
 
         [Fact]
-        public void PersistentReturnsNullWhenGetAgainstNoStore()
+        public async Task PersistentReturnsNullWhenGetAgainstNoStore()
         {
             var state = new SkillState();
-            var result = state.GetAttribute(SimpleKey);
+            var result = await state.Get<string>(SimpleKey);
             Assert.Null(result);
         }
     }

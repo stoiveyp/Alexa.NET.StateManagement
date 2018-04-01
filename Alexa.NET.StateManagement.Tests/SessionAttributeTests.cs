@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Alexa.NET.Request;
 using Xunit;
 
@@ -13,11 +14,11 @@ namespace Alexa.NET.StateManagement.Tests
         private string replacementValue = "replacement";
 
         [Fact]
-        public void SetSessionAttributeAgainstRequest()
+        public void SetSessionAttributeAgainstSessionObject()
         {
             var state = new SkillState(new Session());
 
-            state.SetAttribute(simpleKey, simpleValue, AttributeLevel.Session);
+            state.SetSession(simpleKey, simpleValue);
             var result = state.Session.Attributes[simpleKey];
 
             Assert.Equal(simpleValue, result);
@@ -29,7 +30,7 @@ namespace Alexa.NET.StateManagement.Tests
             var state = new SkillState();
 
             Assert.Null(state.Session);
-            state.SetAttribute(simpleKey, simpleValue, AttributeLevel.Session);
+            state.SetSession(simpleKey, simpleValue);
             Assert.NotNull(state.Session);
         }
 
@@ -39,19 +40,19 @@ namespace Alexa.NET.StateManagement.Tests
             var state = new SkillState(new Session { Attributes = new Dictionary<string, object>() });
             state.Session.Attributes.Add(simpleKey, simpleValue);
 
-            var value = state.GetAttribute(simpleKey);
+            var value = state.GetSession<string>(simpleKey);
 
             Assert.Equal(simpleValue, value);
         }
 
         [Fact]
-        public void GetAttributeRetrievesRequestWhenAvailable()
+        public async Task GetAttributeRetrievesRequestWhenAvailable()
         {
             var state = new SkillState(new Session { Attributes = new Dictionary<string, object>() });
-            state.SetAttribute(simpleKey, simpleValue);
-            state.SetAttribute(simpleKey, replacementValue, AttributeLevel.Session);
+            state.SetRequest(simpleKey, simpleValue);
+            state.SetSession(simpleKey, replacementValue);
 
-            var value = state.GetAttribute(simpleKey);
+            var value = await state.Get<string>(simpleKey);
 
             Assert.Equal(simpleValue, value);
         }
