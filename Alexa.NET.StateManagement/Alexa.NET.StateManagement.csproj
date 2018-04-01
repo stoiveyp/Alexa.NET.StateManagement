@@ -2,8 +2,8 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <Authors>Steven Pears</Authors>
-    <Description>Small helper library for state management that works with Alexa.NET - based on the functionality exposed in the Java ASK SDK v2</Description>
-    <PackageReleaseNotes>Initial functionality</PackageReleaseNotes>
+    <Description>Small helper library for state management that works with Alexa.NET</Description>
+    <PackageReleaseNotes>Initial functionality for setting and getting data from request, session and persistence levels</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
   <ItemGroup>
