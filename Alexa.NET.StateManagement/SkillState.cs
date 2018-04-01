@@ -134,17 +134,25 @@ namespace Alexa.NET.StateManagement
                 Session.Attributes = new Dictionary<string, object>();
             }
 
-            if (!Session.Attributes.TryAdd(key, value))
+            if (!Session.Attributes.ContainsKey(key))
             {
                 Session.Attributes[key] = value;
+            }
+            else
+            {
+                Session.Attributes.Add(key,value);
             }
         }
 
         public void SetRequest<T>(string key, T value)
         {
-            if (!RequestAttributes.TryAdd(key, value))
+            if (!RequestAttributes.ContainsKey(key))
             {
                 RequestAttributes[key] = value;
+            }
+            else
+            {
+                RequestAttributes.Add(key,value);
             }
         }
     }

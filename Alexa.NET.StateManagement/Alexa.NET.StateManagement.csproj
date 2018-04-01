@@ -1,7 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netstandard1.6</TargetFramework>
     <Authors>Steven Pears</Authors>
+    <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
     <Description>Small helper library for state management that works with Alexa.NET</Description>
     <PackageReleaseNotes>Initial functionality for setting and getting data from request, session and persistence levels</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
