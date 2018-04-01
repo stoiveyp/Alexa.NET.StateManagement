@@ -11,14 +11,26 @@ namespace Alexa.NET.StateManagement
         public Dictionary<string, object> RequestAttributes { get; }
         public Session Session { get; }
 
-        public SkillState() : this((Session)null) { }
+        public SkillState() : this((Session)null,null) { }
 
-        public SkillState(SkillRequest request) : this(request.Session)
+        public SkillState(SkillRequest request) : this(request,null)
         {
 
         }
 
-        public SkillState(Session session)
+        public SkillState(SkillRequest request, IPersistenceStore persistence) : this(request.Session, persistence)
+        {
+        }
+
+        public SkillState(IPersistenceStore persistence) : this((Session)null, persistence)
+        {
+
+        }
+
+        public SkillState(Session session):this(session,null) {
+        }
+
+        public SkillState(Session session, IPersistenceStore persistence)
         {
             Session = session;
             RequestAttributes = new Dictionary<string, object>();

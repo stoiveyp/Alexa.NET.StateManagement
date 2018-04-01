@@ -8,9 +8,9 @@ namespace Alexa.NET.StateManagement
             return new SkillState(request);
         }
 
-        public static ISkillState StateManagement(this Session session)
+        public static ISkillState StateManagement(this Session session, IPersistenceStore store = null)
         {
-            return new SkillState(session);
+            return new SkillState(session, null);
         }
     }
 }

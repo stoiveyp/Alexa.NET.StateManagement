@@ -2,7 +2,7 @@ using System;
 using Alexa.NET.StateManagement;
 using Xunit;
 
-namespace Alexa.NET.Statemanagement.Tests
+namespace Alexa.NET.StateManagement.Tests
 {
     public class RequestAttributeTests
     {
