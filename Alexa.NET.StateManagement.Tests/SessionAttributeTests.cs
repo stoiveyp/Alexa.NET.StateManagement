@@ -28,8 +28,9 @@ namespace Alexa.NET.StateManagement.Tests
         {
             var state = new SkillState();
 
-            Assert.Throws<InvalidOperationException>(() =>
-                state.SetAttribute(simpleKey, simpleValue, AttributeLevel.Session));
+            Assert.Null(state.Session);
+            state.SetAttribute(simpleKey, simpleValue, AttributeLevel.Session);
+            Assert.NotNull(state.Session);
         }
 
         [Fact]
@@ -48,7 +49,7 @@ namespace Alexa.NET.StateManagement.Tests
         {
             var state = new SkillState(new Session { Attributes = new Dictionary<string, object>() });
             state.SetAttribute(simpleKey, simpleValue);
-            state.SetAttribute(simpleKey,replacementValue,AttributeLevel.Session);
+            state.SetAttribute(simpleKey, replacementValue, AttributeLevel.Session);
 
             var value = state.GetAttribute(simpleKey);
 

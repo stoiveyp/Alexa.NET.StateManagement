@@ -8,17 +8,20 @@ namespace Alexa.NET.StateManagement
 
     public class SkillState : ISkillState
     {
+        private const string NoPersistenceMessage = "No persistence store set";
         public Dictionary<string, object> RequestAttributes { get; }
-        public Session Session { get; }
+        public Session Session { get; private set;}
 
-        public SkillState() : this((Session)null,null) { }
+        public IPersistenceStore Persistence { get; }
 
-        public SkillState(SkillRequest request) : this(request,null)
+        public SkillState() : this((Session)null, null) { }
+
+        public SkillState(SkillRequest request) : this(request, null)
         {
 
         }
 
-        public SkillState(SkillRequest request, IPersistenceStore persistence) : this(request.Session, persistence)
+        public SkillState(Session session) : this(session, null)
         {
         }
 
@@ -26,19 +29,20 @@ namespace Alexa.NET.StateManagement
         {
 
         }
-
-        public SkillState(Session session):this(session,null) {
+        public SkillState(SkillRequest request, IPersistenceStore persistence) : this(request.Session, persistence)
+        {
         }
 
         public SkillState(Session session, IPersistenceStore persistence)
         {
             Session = session;
+            Persistence = persistence;
             RequestAttributes = new Dictionary<string, object>();
         }
 
         public object GetAttribute(string key)
         {
-            return GetRequest(key) ?? GetSession(key);
+            return GetRequest(key) ?? GetSession(key) ?? GetPersistent(key);
         }
 
         public object GetAttribute(string key, AttributeLevel level)
@@ -49,9 +53,21 @@ namespace Alexa.NET.StateManagement
                     return GetRequest(key);
                 case AttributeLevel.Session:
                     return GetSession(key);
+                case AttributeLevel.Persistent:
+                    if (Persistence == null)
+                    {
+                        throw new InvalidOperationException(NoPersistenceMessage);
+                    }
+                    return GetPersistent(key);
+
             }
 
             return null;
+        }
+
+        private object GetPersistent(string key)
+        {
+            return Persistence?.Get(key);
         }
 
         private object GetRequest(string key)
@@ -80,14 +96,26 @@ namespace Alexa.NET.StateManagement
                 case AttributeLevel.Session:
                     AddSession(key, value);
                     break;
+                case AttributeLevel.Persistent:
+                    AddPersistent(key, value);
+                    break;
             }
+        }
+
+        private void AddPersistent(string key, object value)
+        {
+            if (Persistence == null)
+            {
+                throw new InvalidOperationException(NoPersistenceMessage);
+            }
+            Persistence.Set(key, value);
         }
 
         private void AddSession(string key, string value)
         {
             if (Session == null)
             {
-                throw new InvalidOperationException("No session set");
+                Session = new Session();
             }
 
             if (Session.Attributes == null)
