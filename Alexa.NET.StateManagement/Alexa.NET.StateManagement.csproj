@@ -1,11 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netstandard1.6</TargetFramework>
     <Authors>Steven Pears</Authors>
-    <Description>Small helper library for state management that works with Alexa.NET - based on the functionality exposed in the Java ASK SDK v2</Description>
-    <PackageReleaseNotes>Initial functionality</PackageReleaseNotes>
+    <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
+    <Description>Small helper library for state management that works with Alexa.NET</Description>
+    <PackageReleaseNotes>Add remove method to SkillState (sets value to null in all levels)
+Tidy up IPersistenceStore parameter names</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageLicenseUrl>https://github.com/stoiveyp/Alexa.NET.StateManagement/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/stoiveyp/Alexa.NET.StateManagement</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/stoiveyp/Alexa.NET.StateManagement</RepositoryUrl>
   </PropertyGroup>
-
+  <ItemGroup>
+    <PackageReference Include="Alexa.NET" Version="1.5.0" />
+  </ItemGroup>
 </Project>
