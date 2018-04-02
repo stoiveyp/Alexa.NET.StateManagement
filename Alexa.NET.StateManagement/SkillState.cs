@@ -146,7 +146,7 @@ namespace Alexa.NET.StateManagement
 
         public void SetRequest<T>(string key, T value)
         {
-            if (!RequestAttributes.ContainsKey(key))
+            if (RequestAttributes.ContainsKey(key))
             {
                 RequestAttributes[key] = value;
             }
@@ -154,6 +154,13 @@ namespace Alexa.NET.StateManagement
             {
                 RequestAttributes.Add(key,value);
             }
+        }
+
+        public void Remove(string key)
+        {
+            SetRequest(key, (object)null);
+            SetSession(key,(object)null);
+            SetPersistent(key, (object) null);
         }
     }
 }

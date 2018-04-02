@@ -4,8 +4,12 @@
     <Authors>Steven Pears</Authors>
     <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
     <Description>Small helper library for state management that works with Alexa.NET</Description>
-    <PackageReleaseNotes>Initial functionality for setting and getting data from request, session and persistence levels</PackageReleaseNotes>
+    <PackageReleaseNotes>Add remove method to SkillState (sets value to null in all levels)
+Tidy up IPersistenceStore parameter names</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageLicenseUrl>https://github.com/stoiveyp/Alexa.NET.StateManagement/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/stoiveyp/Alexa.NET.StateManagement</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/stoiveyp/Alexa.NET.StateManagement</RepositoryUrl>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Alexa.NET" Version="1.5.0" />
