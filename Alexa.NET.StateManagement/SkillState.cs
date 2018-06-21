@@ -145,7 +145,7 @@ namespace Alexa.NET.StateManagement
                 Session.Attributes = new Dictionary<string, object>();
             }
 
-            if (!Session.Attributes.ContainsKey(key))
+            if (Session.Attributes.ContainsKey(key))
             {
                 Session.Attributes[key] = value;
             }
