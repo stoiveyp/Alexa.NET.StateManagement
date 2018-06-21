@@ -1,5 +1,6 @@
 using System;
 using System.Net.Sockets;
+using Newtonsoft.Json.Linq;
 
 namespace Alexa.NET.StateManagement
 {
@@ -105,8 +106,18 @@ namespace Alexa.NET.StateManagement
             object tempValue = null;
             if (Session?.Attributes?.TryGetValue(key, out tempValue) ?? false)
             {
-                value = (T)tempValue;
-                return true;
+                switch (tempValue)
+                {
+                    case T immediate:
+                        value = immediate;
+                        return true;
+                    case JObject json:
+                        value = json.ToObject<T>();
+                        return true;
+                    default:
+                        value = (T)Convert.ChangeType(tempValue, typeof(T));
+                        break;
+                }
             }
 
             value = default(T);
@@ -140,7 +151,7 @@ namespace Alexa.NET.StateManagement
             }
             else
             {
-                Session.Attributes.Add(key,value);
+                Session.Attributes.Add(key, value);
             }
         }
 
@@ -152,15 +163,15 @@ namespace Alexa.NET.StateManagement
             }
             else
             {
-                RequestAttributes.Add(key,value);
+                RequestAttributes.Add(key, value);
             }
         }
 
         public void Remove(string key)
         {
             SetRequest(key, (object)null);
-            SetSession(key,(object)null);
-            SetPersistent(key, (object) null);
+            SetSession(key, (object)null);
+            SetPersistent(key, (object)null);
         }
     }
 }
