@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Alexa.NET.Request;
+using Newtonsoft.Json;
 using Xunit;
 
 namespace Alexa.NET.StateManagement.Tests
@@ -22,6 +23,23 @@ namespace Alexa.NET.StateManagement.Tests
             var result = state.Session.Attributes[simpleKey];
 
             Assert.Equal(simpleValue, result);
+        }
+
+        [Fact]
+        public void SessionDeserializeComplexObject()
+        {
+            var session = new Session();
+            var data = new Intent {Slots = new Dictionary<string, Slot> {{"test", new Slot {Name = "test"}}}};
+            session.Attributes = new Dictionary<string, object> {{"data", data.Slots}};
+
+            var serial = JsonConvert.SerializeObject(session);
+            var returnresult = JsonConvert.DeserializeObject<Session>(serial);
+            var state = new SkillState(returnresult);
+            var result = state.GetSession<Dictionary<string,Slot>>("data");
+            
+            Assert.NotNull(result);
+            Assert.Single(result);
+            Assert.Equal("test",result["test"].Name);
         }
 
         [Fact]
