@@ -13,7 +13,7 @@ namespace Alexa.NET.StateManagement.Tests
         [Fact]
         public void SkillStateWorksFromSession()
         {
-            var state = new SkillRequest().Session.StateManagement();
+            var state = new SkillRequest().StateManagement();
             Assert.NotNull(state);
         }
 
