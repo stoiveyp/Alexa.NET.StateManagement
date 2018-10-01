@@ -5,7 +5,7 @@ namespace Alexa.NET.StateManagement
     {
         public static ISkillState StateManagement(this SkillRequest request, IPersistenceStore store = null)
         {
-            return new SkillState(request, null);
+            return new SkillState(request, store);
         }
     }
 }
