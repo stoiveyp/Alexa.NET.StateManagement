@@ -5,7 +5,9 @@
     <Version>2.0.0</Version>
     <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
     <Description>Small helper library for state management that works with Alexa.NET</Description>
-    <PackageReleaseNotes>Fix issue with existing session keys</PackageReleaseNotes>
+    <PackageReleaseNotes>Update IPersistenceStore to be aware of SkillRequests
+Update SkillState to handle new IPersistenceStore interface
+Bump to V2</PackageReleaseNotes>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageLicenseUrl>https://github.com/stoiveyp/Alexa.NET.StateManagement/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/stoiveyp/Alexa.NET.StateManagement</PackageProjectUrl>
