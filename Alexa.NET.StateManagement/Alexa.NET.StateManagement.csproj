@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard1.6</TargetFramework>
     <Authors>Steven Pears</Authors>
-    <Version>1.0.0</Version>
+    <Version>2.0.0</Version>
     <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
     <Description>Small helper library for state management that works with Alexa.NET</Description>
     <PackageReleaseNotes>Fix issue with existing session keys</PackageReleaseNotes>

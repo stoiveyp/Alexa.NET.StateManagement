@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Alexa.NET.Request;
+using Alexa.NET.Request.Type;
 using Newtonsoft.Json;
 using Xunit;
 
@@ -17,7 +19,7 @@ namespace Alexa.NET.StateManagement.Tests
         [Fact]
         public void SetSessionAttributeAgainstSessionObject()
         {
-            var state = new SkillState(new Session());
+            var state = new SkillState(new SkillRequest());
 
             state.SetSession(simpleKey, simpleValue);
             var result = state.Session.Attributes[simpleKey];
@@ -29,12 +31,13 @@ namespace Alexa.NET.StateManagement.Tests
         public void SessionDeserializeComplexObject()
         {
             var session = new Session();
+            
             var data = new Intent {Slots = new Dictionary<string, Slot> {{"test", new Slot {Name = "test"}}}};
             session.Attributes = new Dictionary<string, object> {{"data", data.Slots}};
 
             var serial = JsonConvert.SerializeObject(session);
             var returnresult = JsonConvert.DeserializeObject<Session>(serial);
-            var state = new SkillState(returnresult);
+            var state = new SkillState(new SkillRequest{Session=returnresult});
             var result = state.GetSession<Dictionary<string,Slot>>("data");
             
             Assert.NotNull(result);
@@ -55,7 +58,7 @@ namespace Alexa.NET.StateManagement.Tests
         [Fact]
         public void GetAttributeRetrievesSessionWhenRequestIsEmpty()
         {
-            var state = new SkillState(new Session { Attributes = new Dictionary<string, object>() });
+            var state = new SkillState(new SkillRequest{Session=new Session { Attributes = new Dictionary<string, object>() }});
             state.Session.Attributes.Add(simpleKey, simpleValue);
 
             var value = state.GetSession<string>(simpleKey);
@@ -66,7 +69,7 @@ namespace Alexa.NET.StateManagement.Tests
         [Fact]
         public async Task GetAttributeRetrievesRequestWhenAvailable()
         {
-            var state = new SkillState(new Session { Attributes = new Dictionary<string, object>() });
+            var state = new SkillState(new SkillRequest{Session=new Session { Attributes = new Dictionary<string, object>() }});
             state.SetRequest(simpleKey, simpleValue);
             state.SetSession(simpleKey, replacementValue);
 
