@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Alexa.NET.Request;
 using NSubstitute;
 using Xunit;
 
@@ -14,30 +15,32 @@ namespace Alexa.NET.StateManagement.Tests
         [Fact]
         public async Task GetCallsPersistentStore()
         {
+            var request = new SkillRequest();
             var persistence = Substitute.For<IPersistenceStore>();
-            var state = new SkillState(persistence);
+            var state = new SkillState(request,persistence);
 
             await state.Get<string>(SimpleKey);
 
-            await persistence.Received(1).Get<string>(SimpleKey);
+            await persistence.Received(1).Get<string>(request, SimpleKey);
         }
 
         [Fact]
         public void SetCallsPersistentStore()
         {
+            var request = new SkillRequest();
             var persistence = Substitute.For<IPersistenceStore>();
-            var state = new SkillState(persistence);
+            var state = new SkillState(request,persistence);
 
             state.SetPersistent(SimpleKey, SimpleValue);
 
-            persistence.Received(1).Set(SimpleKey, SimpleValue);
+            persistence.Received(1).Set(request,SimpleKey, SimpleValue);
         }
 
         [Fact]
         public async Task PersistentHiddenWhenRequestAvailable()
         {
             var persistence = Substitute.For<IPersistenceStore>();
-            persistence.Get<string>(SimpleKey).Returns(ReplacementValue);
+            persistence.Get<string>(Arg.Any<SkillRequest>(),SimpleKey).Returns(ReplacementValue);
 
             var skillState = new SkillState();
             skillState.SetRequest(SimpleKey, SimpleValue);
@@ -51,7 +54,7 @@ namespace Alexa.NET.StateManagement.Tests
         public async Task PersistentHiddenWhenSessionAvailable()
         {
             var persistence = Substitute.For<IPersistenceStore>();
-            persistence.Get<string>(SimpleKey).Returns(ReplacementValue);
+            persistence.Get<string>(Arg.Any<SkillRequest>(),SimpleKey).Returns(ReplacementValue);
 
             var skillState = new SkillState();
             skillState.SetSession(SimpleKey, SimpleValue);
@@ -64,9 +67,9 @@ namespace Alexa.NET.StateManagement.Tests
         public async Task PersistentCalledWhenGetCalledExplicit()
         {
             var persistence = Substitute.For<IPersistenceStore>();
-            persistence.Get<string>(SimpleKey).Returns(ReplacementValue);
+            persistence.Get<string>(Arg.Any<SkillRequest>(),SimpleKey).Returns(ReplacementValue);
 
-            var skillState = new SkillState(persistence);
+            var skillState = new SkillState(new SkillRequest(),persistence);
             skillState.SetSession(SimpleKey, SimpleValue);
 
             var result = await skillState.GetPersistent<string>(SimpleKey);

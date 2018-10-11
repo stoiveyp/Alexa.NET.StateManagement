@@ -12,32 +12,22 @@ namespace Alexa.NET.StateManagement
     {
         private const string NoPersistenceMessage = "No persistence store set";
         public Dictionary<string, object> RequestAttributes { get; }
-        public Session Session { get; private set; }
+        public SkillRequest SkillRequest { get; }
+        public Session Session { get; set; }
 
         public IPersistenceStore Persistence { get; }
 
-        public SkillState() : this((Session)null, null) { }
+        public SkillState() : this((SkillRequest)null, null) { }
 
         public SkillState(SkillRequest request) : this(request, null)
         {
 
         }
 
-        public SkillState(Session session) : this(session, null)
+        public SkillState(SkillRequest request, IPersistenceStore persistence)
         {
-        }
-
-        public SkillState(IPersistenceStore persistence) : this((Session)null, persistence)
-        {
-
-        }
-        public SkillState(SkillRequest request, IPersistenceStore persistence) : this(request.Session, persistence)
-        {
-        }
-
-        public SkillState(Session session, IPersistenceStore persistence)
-        {
-            Session = session;
+            SkillRequest = request;
+            Session = request?.Session;
             Persistence = persistence;
             RequestAttributes = new Dictionary<string, object>();
         }
@@ -68,7 +58,7 @@ namespace Alexa.NET.StateManagement
 
         private Task<T> GetPersistentOrDefault<T>(string key)
         {
-            return Persistence?.Get<T>(key) ?? Task.FromResult(default(T));
+            return Persistence?.Get<T>(SkillRequest,key) ?? Task.FromResult(default(T));
         }
 
         public T GetRequest<T>(string key)
@@ -130,7 +120,7 @@ namespace Alexa.NET.StateManagement
             {
                 throw new InvalidOperationException(NoPersistenceMessage);
             }
-            return Persistence.Set(key, value);
+            return Persistence.Set(SkillRequest,key, value);
         }
 
         public void SetSession<T>(string key, T value)
