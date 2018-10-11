@@ -116,7 +116,7 @@ namespace Alexa.NET.StateManagement
                         return true;
                     default:
                         value = (T)Convert.ChangeType(tempValue, typeof(T));
-                        break;
+                        return true;
                 }
             }
 

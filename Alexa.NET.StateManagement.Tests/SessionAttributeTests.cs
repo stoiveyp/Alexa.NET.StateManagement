@@ -53,6 +53,23 @@ namespace Alexa.NET.StateManagement.Tests
         }
 
         [Fact]
+        public void CheckIntSessionValues()
+        {
+            var sessionOne = new Session();
+            var requestOne = new SkillRequest { Session = sessionOne };
+            var state = new SkillState(requestOne);
+
+            state.SetSession("apple", 2);
+
+            var serial = JsonConvert.SerializeObject(state.Session);
+            var sessionTwo = JsonConvert.DeserializeObject<Session>(serial);
+            var stateTwo = new SkillState(new SkillRequest { Session = sessionTwo });
+            var result = stateTwo.GetSession<int>("apple");
+
+            Assert.Equal(2, result);
+        }
+
+        [Fact]
         public void GetAttributeRetrievesSessionWhenRequestIsEmpty()
         {
             var state = new SkillState(new Session { Attributes = new Dictionary<string, object>() });
