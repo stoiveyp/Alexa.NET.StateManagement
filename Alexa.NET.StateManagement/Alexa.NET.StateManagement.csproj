@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Authors>Steven Pears</Authors>
-    <Version>1.1.0</Version>
+    <Version>2.1.0</Version>
     <Description>Small helper library for state management that works with Alexa.NET</Description>
     <PackageReleaseNotes>Fix issue where value types weren't being returned correctly</PackageReleaseNotes>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
