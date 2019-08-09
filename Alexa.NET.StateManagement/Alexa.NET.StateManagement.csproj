@@ -1,9 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard1.6</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <Authors>Steven Pears</Authors>
-    <Version>2.0.0</Version>
-    <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
+    <Version>2.1.0</Version>
     <Description>Small helper library for state management that works with Alexa.NET</Description>
     <PackageReleaseNotes>Fix issue where value types weren't being returned correctly</PackageReleaseNotes>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
@@ -12,6 +11,6 @@
     <RepositoryUrl>https://github.com/stoiveyp/Alexa.NET.StateManagement</RepositoryUrl>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Alexa.NET" Version="1.5.0" />
+    <PackageReference Include="Alexa.NET" Version="1.8.0" />
   </ItemGroup>
 </Project>
