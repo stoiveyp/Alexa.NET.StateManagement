@@ -70,6 +70,16 @@ namespace Alexa.NET.StateManagement.Tests
         }
 
         [Fact]
+        public async Task CheckAttributeInJson()
+        {
+            var requestOne = JsonConvert.DeserializeObject<SkillRequest>(System.IO.File.ReadAllText("example.json"));
+            var stateTwo = new SkillState(requestOne);
+            var result = await stateTwo.Get<int>("apple");
+
+            Assert.Equal(2, result);
+        }
+
+        [Fact]
         public void GetAttributeRetrievesSessionWhenRequestIsEmpty()
         {
             var state = new SkillState(new Session { Attributes = new Dictionary<string, object>() });
