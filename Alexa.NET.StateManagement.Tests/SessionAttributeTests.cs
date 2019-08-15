@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Alexa.NET.Request;
 using Alexa.NET.Request.Type;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Xunit;
 
 namespace Alexa.NET.StateManagement.Tests
@@ -80,6 +82,16 @@ namespace Alexa.NET.StateManagement.Tests
             var result = await stateTwo.Get<int>("apple");
 
             Assert.Equal(2, result);
+        }
+
+        [Fact]
+        public async Task CheckArrayInJson()
+        {
+            var requestOne = JsonConvert.DeserializeObject<SkillRequest>(System.IO.File.ReadAllText("example.json"));
+            var stateTwo = new SkillState(requestOne);
+            var result = await stateTwo.Get<JObject[]>("products");
+
+            Assert.Single(result);
         }
 
         [Fact]

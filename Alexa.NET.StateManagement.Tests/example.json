@@ -7,7 +7,20 @@
       "applicationId": "amzn1.ask.skill.8e697c72-8054-445e-8a04-307587783ecc"
     },
     "attributes": {
-      "apple": 2
+      "apple": 2,
+      "products": [
+        {
+          "productId": "testproductid",
+          "name": "Test Product 1",
+          "type": "SUBSCRIPTION",
+          "summary": "Keep track of your rolls",
+          "purchasable": "PURCHASABLE",
+          "entitled": "NOT_ENTITLED",
+          "referenceName": "RollHistory",
+          "activeEntitlementCount": 0,
+          "purchaseMode": "TEST"
+        }
+      ]
     },
     "user": {
       "userId": "amzn1.ask.account.AFNRXZHAVX7CYBEOGUP75PSHXOKYVZOTY4ELE2XNSWBKZWLGMQIP2ATN6PETZW3NCKYRA4SCNYBZHDGSJLSNJESE4BQ3OY35MIJUW2ONA4AGRQ3I2HPJHSJB7SI24FJGZLUVBQALMI4244MODYE3AJHYIMHMSFV2Q7SW6G4JO36KD47ZM2J32G3HLN7B6SVM63HPQQGQTOE7XOY",

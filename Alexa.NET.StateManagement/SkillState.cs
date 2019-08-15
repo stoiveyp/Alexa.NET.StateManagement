@@ -101,12 +101,17 @@ namespace Alexa.NET.StateManagement
                     case T immediate:
                         value = immediate;
                         return true;
-                    case JObject json:
+                    case JToken json:
                         value = json.ToObject<T>();
                         return true;
                     default:
-                        value = (T)Convert.ChangeType(tempValue, typeof(T));
-                        return true;
+                        if(tempValue is IConvertible convert)
+                        {
+                            value = (T)Convert.ChangeType(tempValue, typeof(T));
+                            return true;
+                        }
+
+                        break;
                 }
             }
 

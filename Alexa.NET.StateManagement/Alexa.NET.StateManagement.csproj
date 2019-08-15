@@ -2,15 +2,22 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Authors>Steven Pears</Authors>
-    <Version>2.1.0</Version>
+    <Version>2.1.1</Version>
     <Description>Small helper library for state management that works with Alexa.NET</Description>
-    <PackageReleaseNotes>Fix issue where value types weren't being returned correctly</PackageReleaseNotes>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <PackageLicenseUrl>https://github.com/stoiveyp/Alexa.NET.StateManagement/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageReleaseNotes>Fix issue where arrays aren't deserialised from session attributes properly</PackageReleaseNotes>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageLicenseUrl></PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/stoiveyp/Alexa.NET.StateManagement</PackageProjectUrl>
     <RepositoryUrl>https://github.com/stoiveyp/Alexa.NET.StateManagement</RepositoryUrl>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Alexa.NET" Version="1.8.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 </Project>
