@@ -20,7 +20,7 @@ jobs:
       - name: Build Solution
         run:  dotnet build Alexa.NET.StateManagement/Alexa.NET.StateManagement.csproj -c Release
       - name: Test Solution
-        run:  dotnet test Alexa.NET.StateManagement.Tests/Alexa.NET.StateManagement.Tests.csproj
+        run:  dotnet test Alexa.NET.StateManagement.Tests/Alexa.NET.Statemanagement.Tests.csproj
       - name: GH Deploy Workaround
         run: |
            export REPO_NAME=$(echo ${GITHUB_REPOSITORY} | sed 's/stoiveyp\///')
